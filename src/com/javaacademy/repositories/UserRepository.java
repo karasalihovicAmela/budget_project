@@ -76,6 +76,7 @@ public class UserRepository {
                 user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance);
             }
             System.out.println("User found");
+            statement.close();
             return user;
         } catch (SQLException e) {
             System.out.println("User can not be found!");
@@ -103,6 +104,7 @@ public class UserRepository {
                 double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
                 user = new User(idDb, firstName, lastName, emailDb, passwordDb, null, totalBalance);
             }
+            statement.close();
             if (user != null) {
                 System.out.println("User found " + user.getId() + " name: " + user.getLastName());
                 return user;
@@ -134,6 +136,7 @@ public class UserRepository {
                 double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
                 user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance);
             }
+            statement.close();
             if (user != null) {
                 System.out.println("User found!");
                 return user;
