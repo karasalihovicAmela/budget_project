@@ -28,6 +28,14 @@ public class UserService {
                 password = scanner.next();
                 pass = validatePassword(password);
             }
+
+            String passwordConfirm = "";
+            boolean passConfirm = false;
+            while (passConfirm != true) {
+                System.out.println("Please confirm password: ");
+                passwordConfirm = scanner.next();
+                passConfirm = passwordConfirm.equals(password);
+            }
             System.out.println("Please enter your budget:");
             Double totalBalance = scanner.nextDouble();
 
