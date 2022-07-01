@@ -76,12 +76,19 @@ public class Main {
                             loggedInUser = null;
                             break;
                         case 1:
-                            System.out.println("You choose to log into app! Please follow next steps: ");
-                            loggedInUser = userService.login(scanner, connection);
+                            System.out.println("Not implemented yet!");
                             break;
                         case 2:
-                            System.out.println("You choose to register user! Please follow next setps: ");
-                            userService.register(scanner, connection);
+                            System.out.println("Not implemented yet!");
+                            break;
+                        case 3:
+                            System.out.println("Not implemented yet!");
+                            break;
+                        case 4:
+                            System.out.println("Not implemented yet!");
+                            break;
+                        case 5:
+                            System.out.println("Not implemented yet!");
                             break;
                         default:
                             System.out.println("Wrong choice, please try again: ");
