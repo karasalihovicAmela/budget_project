@@ -42,7 +42,7 @@ public class UserService {
             User checkUser = userRepository.findUserByEmail(connection, email);
             if (checkUser == null) {
                 int id = getIdAndCheckIfItExists(connection);
-                User user = new User(id, firstName, lastName, email, password, null, totalBalance);
+                User user = new User(id, firstName, lastName, email, password, null, totalBalance, false);
 
                 User savedUser = userRepository.registerUser(connection, user);
                 if (savedUser == null) {
@@ -58,20 +58,31 @@ public class UserService {
         }
     }
 
-    public boolean login(Scanner scanner, Connection connection) {
+    public User login(Scanner scanner, Connection connection) {
         UserRepository userRepository = new UserRepository();
 
         System.out.println("Please enter email: ");
         String email = scanner.next();
         System.out.println("Please enter password: ");
         String password = scanner.next();
-        User user = userRepository.findUserByEmailAndPassword(connection, email, password);
 
+        User user = userRepository.findUserByEmailAndPassword(connection, email, password);
         if (user == null) {
             System.out.println("You can't log into app!");
-            return false;
+            return null;
+        } else {
+            user.setLoggedIn(true);
+            userRepository.updateUser(connection, user);
         }
-        return true;
+
+        return user;
+    }
+
+    public void logout(Connection connection) {
+        UserRepository userRepository = new UserRepository();
+        User user = userRepository.getLoggedInUser(connection);
+        user.setLoggedIn(false);
+        userRepository.updateUser(connection, user);
     }
 
     private Integer getIdAndCheckIfItExists(Connection connection) {

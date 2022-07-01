@@ -24,6 +24,7 @@ public class UserRepository {
                     " LAST_NAME        TEXT                    NOT NULL," +
                     " EMAIL            TEXT                    NOT NULL," +
                     " PASSWORD         TEXT                    NOT NULL," +
+                    " LOGGED_IN        BOOLEAN                 NOT NULL," +
                     " TOTAL_BALANCE    NUMERIC )";
             statement.execute(sql);
             System.out.println("Successfully created user table in DB");
@@ -41,9 +42,9 @@ public class UserRepository {
         try {
             Statement statement = connection.createStatement();
             // CREATE USER
-            String sql = "INSERT INTO user_ba (ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, TOTAL_BALANCE) " +
+            String sql = "INSERT INTO user_ba (ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, TOTAL_BALANCE, LOGGED_IN) " +
                     "VALUES (" + user.getId() + ", '" + user.getFirstName() + "', '" + user.getLastName() +
-                    "', '" + user.getEmail() + "', '" + user.getPassword() + "', " + user.getTotalBalance() + ")";
+                    "', '" + user.getEmail() + "', '" + user.getPassword() + "', " + user.getTotalBalance() + ", FALSE)";
             statement.execute(sql);
             System.out.println("Successfully created user in DB");
             statement.close();
@@ -73,7 +74,8 @@ public class UserRepository {
                 String emailDb = resultSet.getString("EMAIL");
                 String passwordDb = resultSet.getString("PASSWORD");
                 double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
-                user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance);
+                boolean loggedIn = resultSet.getBoolean("LOGGED_IN");
+                user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance, loggedIn);
             }
             System.out.println("User found");
             statement.close();
@@ -102,7 +104,8 @@ public class UserRepository {
                 String emailDb = resultSet.getString("EMAIL");
                 String passwordDb = resultSet.getString("PASSWORD");
                 double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
-                user = new User(idDb, firstName, lastName, emailDb, passwordDb, null, totalBalance);
+                boolean loggedIn = resultSet.getBoolean("LOGGED_IN");
+                user = new User(idDb, firstName, lastName, emailDb, passwordDb, null, totalBalance, loggedIn);
             }
             statement.close();
             if (user != null) {
@@ -134,7 +137,8 @@ public class UserRepository {
                 String emailDb = resultSet.getString("EMAIL");
                 String passwordDb = resultSet.getString("PASSWORD");
                 double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
-                user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance);
+                boolean loggedIn = resultSet.getBoolean("LOGGED_IN");
+                user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance, loggedIn);
             }
             statement.close();
             if (user != null) {
@@ -150,4 +154,54 @@ public class UserRepository {
             return null;
         }
     }
+
+    public void updateUser(Connection connection, User user) {
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "UPDATE user_ba SET " +
+                    "FIRST_NAME = '" + user.getFirstName() + "', " +
+                    "LAST_NAME = '" + user.getLastName() + "', " +
+                    "EMAIL = '" + user.getEmail() + "', " +
+                    "PASSWORD = '" + user.getPassword() + "', " +
+                    "LOGGED_IN = " + user.getLoggedIn() + ", " +
+                    "TOTAL_BALANCE = " + user.getTotalBalance() + " " +
+                    "WHERE id = " + user.getId();
+            statement.execute(sql);
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("User can not be updated!");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+
+    public User getLoggedInUser(Connection connection){
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "SELECT * FROM user_ba WHERE LOGGED_IN = true";
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            User user = null;
+            while (resultSet.next()) {
+                int id = resultSet.getInt("ID");
+                String firstName = resultSet.getString("FIRST_NAME");
+                String lastName = resultSet.getString("LAST_NAME");
+                String emailDb = resultSet.getString("EMAIL");
+                String passwordDb = resultSet.getString("PASSWORD");
+                double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
+                boolean loggedIn = resultSet.getBoolean("LOGGED_IN");
+                user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance, loggedIn);
+            }
+            statement.close();
+            return user;
+        } catch (SQLException e) {
+            System.out.println("User can not be found!");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+            return null;
+        }
+    }
+
 }

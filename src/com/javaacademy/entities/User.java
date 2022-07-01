@@ -14,11 +14,13 @@ public class User {
     private String password;
     private List<Category> categories;
     private Double totalBalance;
+    private Boolean loggedIn;
 
     public User() {
     }
 
-    public User(Integer id, String firstName, String lastName, String email, String password, List<Category> categories, Double totalBalance) {
+    public User(Integer id, String firstName, String lastName, String email, String password,
+                List<Category> categories, Double totalBalance, Boolean loggedIn) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,6 +28,7 @@ public class User {
         this.password = password;
         this.categories = categories;
         this.totalBalance = totalBalance;
+        this.loggedIn = loggedIn;
     }
 
     public Integer getId() {
@@ -82,5 +85,13 @@ public class User {
 
     public void setTotalBalance(Double totalBalance) {
         this.totalBalance = totalBalance;
+    }
+
+    public Boolean getLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(Boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 }
