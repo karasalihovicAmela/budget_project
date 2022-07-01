@@ -21,9 +21,14 @@ public class UserService {
             String lastName = scanner.next();
             System.out.println("Please enter email: ");
             String email = scanner.next();
-            System.out.println("Please enter password: ");
-            String password = scanner.next();
-            System.out.println("Please enter your budget: ");
+            String password = "";
+            boolean pass = false;
+            while (pass != true) {
+                System.out.println("Please enter password: (Password needs to contain min 8 characters, at least 1 upper case, 1 number and 1 symbol)");
+                password = scanner.next();
+                pass = validatePassword(password);
+            }
+            System.out.println("Please enter your budget:");
             Double totalBalance = scanner.nextDouble();
 
             User checkUser = userRepository.findUserByEmail(connection, email);
@@ -54,7 +59,7 @@ public class UserService {
         String password = scanner.next();
         User user = userRepository.findUserByEmailAndPassword(connection, email, password);
 
-        if(user == null) {
+        if (user == null) {
             System.out.println("You can't log into app!");
             return false;
         }
@@ -70,5 +75,42 @@ public class UserService {
                 return id;
             }
         }
+    }
+
+    private boolean validatePassword(String password) {
+        int count = 0;
+        int countBigLetter = 0;
+        int countNumbers = 0;
+        int countChar = 0;
+        if (password.length() >= 8) {
+            count++;
+        }
+
+        for (char letter : password.toCharArray()) {
+            if (Character.isUpperCase(letter)) {
+                countBigLetter++;
+            }
+            if (Character.isDigit(letter)) {
+                countNumbers++;
+            }
+            if (!Character.isDigit(letter) && !Character.isLetter(letter)) {
+                countChar++;
+            }
+        }
+
+        if (countBigLetter >= 1) {
+            count++;
+        }
+        if (countNumbers >= 1) {
+            count++;
+        }
+        if (countChar >= 1) {
+            count++;
+        }
+
+        if (count >= 4) {
+            return true;
+        }
+        return false;
     }
 }
