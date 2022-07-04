@@ -7,27 +7,37 @@ import java.util.Date;
  */
 public class Category {
 
-    private String categoryName;
+    private Integer id;
+    private Integer userId;
+    private String name;
     private Double amount;
     private Double currentAmount;
-    private Date transactionDate;
 
     public Category() {
     }
 
-    public Category(String categoryName, Double amount, Double currentAmount, Date transactionDate) {
-        this.categoryName = categoryName;
+    public Category(Integer id, Integer userId, String name, Double amount, Double currentAmount) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
         this.amount = amount;
         this.currentAmount = currentAmount;
-        this.transactionDate = transactionDate;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Double getAmount() {
@@ -46,11 +56,11 @@ public class Category {
         this.currentAmount = currentAmount;
     }
 
-    public Date getTransactionDate() {
-        return transactionDate;
+    public String getName() {
+        return name;
     }
 
-    public void setTransactionDate(Date transactionDate) {
-        this.transactionDate = transactionDate;
+    public void setName(String name) {
+        this.name = name;
     }
 }
