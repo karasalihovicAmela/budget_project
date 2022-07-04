@@ -12,22 +12,18 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private List<Category> categories;
-    private Double totalBalance;
     private Boolean loggedIn;
 
     public User() {
     }
 
-    public User(Integer id, String firstName, String lastName, String email, String password,
-                List<Category> categories, Double totalBalance, Boolean loggedIn) {
+    public User(Integer id, String firstName, String lastName, String email,
+                String password, Boolean loggedIn) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.categories = categories;
-        this.totalBalance = totalBalance;
         this.loggedIn = loggedIn;
     }
 
@@ -69,22 +65,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
-
-    public Double getTotalBalance() {
-        return totalBalance;
-    }
-
-    public void setTotalBalance(Double totalBalance) {
-        this.totalBalance = totalBalance;
     }
 
     public Boolean getLoggedIn() {

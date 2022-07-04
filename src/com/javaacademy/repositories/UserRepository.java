@@ -10,9 +10,9 @@ import java.sql.Statement;
 /**
  * @author Amela Karasalihovic
  */
-public class UserRepository {
+public class UserRepository implements Repository<User> {
 
-    public void createUserTable(Connection connection) {
+    public void createTable(Connection connection) {
         // SQL Statements
         try {
             Statement statement = connection.createStatement();
@@ -24,10 +24,8 @@ public class UserRepository {
                     " LAST_NAME        TEXT                    NOT NULL," +
                     " EMAIL            TEXT                    NOT NULL," +
                     " PASSWORD         TEXT                    NOT NULL," +
-                    " LOGGED_IN        BOOLEAN                 NOT NULL," +
-                    " TOTAL_BALANCE    NUMERIC )";
+                    " LOGGED_IN        BOOLEAN                 NOT NULL)";
             statement.execute(sql);
-            System.out.println("Successfully created user table in DB");
             statement.close();
         } catch (SQLException e) {
             System.out.println("Table can not be created!");
@@ -37,16 +35,15 @@ public class UserRepository {
         }
     }
 
-    public User registerUser(Connection connection, User user) {
+    public User insert(Connection connection, User user) {
         // SQL Statements
         try {
             Statement statement = connection.createStatement();
             // CREATE USER
-            String sql = "INSERT INTO user_ba (ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, TOTAL_BALANCE, LOGGED_IN) " +
+            String sql = "INSERT INTO user_ba (ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, LOGGED_IN) " +
                     "VALUES (" + user.getId() + ", '" + user.getFirstName() + "', '" + user.getLastName() +
-                    "', '" + user.getEmail() + "', '" + user.getPassword() + "', " + user.getTotalBalance() + ", FALSE)";
+                    "', '" + user.getEmail() + "', '" + user.getPassword() + "', FALSE)";
             statement.execute(sql);
-            System.out.println("Successfully created user in DB");
             statement.close();
             return user;
         } catch (SQLException e) {
@@ -73,9 +70,8 @@ public class UserRepository {
                 String lastName = resultSet.getString("LAST_NAME");
                 String emailDb = resultSet.getString("EMAIL");
                 String passwordDb = resultSet.getString("PASSWORD");
-                double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
                 boolean loggedIn = resultSet.getBoolean("LOGGED_IN");
-                user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance, loggedIn);
+                user = new User(id, firstName, lastName, emailDb, passwordDb, loggedIn);
             }
             System.out.println("User found");
             statement.close();
@@ -89,7 +85,7 @@ public class UserRepository {
         }
     }
 
-    public User findUserById(Connection connection, Integer id) {
+    public User findById(Connection connection, Integer id) {
         try {
             Statement statement = connection.createStatement();
 
@@ -103,9 +99,8 @@ public class UserRepository {
                 String lastName = resultSet.getString("LAST_NAME");
                 String emailDb = resultSet.getString("EMAIL");
                 String passwordDb = resultSet.getString("PASSWORD");
-                double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
                 boolean loggedIn = resultSet.getBoolean("LOGGED_IN");
-                user = new User(idDb, firstName, lastName, emailDb, passwordDb, null, totalBalance, loggedIn);
+                user = new User(idDb, firstName, lastName, emailDb, passwordDb, loggedIn);
             }
             statement.close();
             if (user != null) {
@@ -136,9 +131,8 @@ public class UserRepository {
                 String lastName = resultSet.getString("LAST_NAME");
                 String emailDb = resultSet.getString("EMAIL");
                 String passwordDb = resultSet.getString("PASSWORD");
-                double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
                 boolean loggedIn = resultSet.getBoolean("LOGGED_IN");
-                user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance, loggedIn);
+                user = new User(id, firstName, lastName, emailDb, passwordDb, loggedIn);
             }
             statement.close();
             if (user != null) {
@@ -155,7 +149,7 @@ public class UserRepository {
         }
     }
 
-    public void updateUser(Connection connection, User user) {
+    public void update(Connection connection, User user) {
         try {
             Statement statement = connection.createStatement();
             String sql = "UPDATE user_ba SET " +
@@ -163,8 +157,7 @@ public class UserRepository {
                     "LAST_NAME = '" + user.getLastName() + "', " +
                     "EMAIL = '" + user.getEmail() + "', " +
                     "PASSWORD = '" + user.getPassword() + "', " +
-                    "LOGGED_IN = " + user.getLoggedIn() + ", " +
-                    "TOTAL_BALANCE = " + user.getTotalBalance() + " " +
+                    "LOGGED_IN = " + user.getLoggedIn() + " " +
                     "WHERE id = " + user.getId();
             statement.execute(sql);
             statement.close();
@@ -189,9 +182,8 @@ public class UserRepository {
                 String lastName = resultSet.getString("LAST_NAME");
                 String emailDb = resultSet.getString("EMAIL");
                 String passwordDb = resultSet.getString("PASSWORD");
-                double totalBalance = resultSet.getDouble("TOTAL_BALANCE");
                 boolean loggedIn = resultSet.getBoolean("LOGGED_IN");
-                user = new User(id, firstName, lastName, emailDb, passwordDb, null, totalBalance, loggedIn);
+                user = new User(id, firstName, lastName, emailDb, passwordDb, loggedIn);
             }
             statement.close();
             return user;

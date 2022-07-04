@@ -2,6 +2,7 @@ package com.javaacademy.services;
 
 import com.javaacademy.entities.User;
 import com.javaacademy.repositories.UserRepository;
+import com.javaacademy.utils.IdGenerator;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -36,15 +37,13 @@ public class UserService {
                 passwordConfirm = scanner.next();
                 passConfirm = passwordConfirm.equals(password);
             }
-            System.out.println("Please enter your budget:");
-            Double totalBalance = scanner.nextDouble();
 
             User checkUser = userRepository.findUserByEmail(connection, email);
             if (checkUser == null) {
-                int id = getIdAndCheckIfItExists(connection);
-                User user = new User(id, firstName, lastName, email, password, null, totalBalance, false);
+                int id = IdGenerator.getIdAndCheckIfItExists(connection, userRepository);
+                User user = new User(id, firstName, lastName, email, password, false);
 
-                User savedUser = userRepository.registerUser(connection, user);
+                User savedUser = userRepository.insert(connection, user);
                 if (savedUser == null) {
                     System.out.println("Please try again: ");
                     value = true;
@@ -72,7 +71,7 @@ public class UserService {
             return null;
         } else {
             user.setLoggedIn(true);
-            userRepository.updateUser(connection, user);
+            userRepository.update(connection, user);
         }
 
         return user;
@@ -82,18 +81,11 @@ public class UserService {
         UserRepository userRepository = new UserRepository();
         User user = userRepository.getLoggedInUser(connection);
         user.setLoggedIn(false);
-        userRepository.updateUser(connection, user);
+        userRepository.update(connection, user);
     }
 
-    private Integer getIdAndCheckIfItExists(Connection connection) {
-        UserRepository userRepository = new UserRepository();
-        while (true) {
-            int id = (int) (Math.random() * 999 + 1);
-            User user = userRepository.findUserById(connection, id);
-            if (user == null) {
-                return id;
-            }
-        }
+    public User getLoggedInUser(Connection connection) {
+        return new UserRepository().getLoggedInUser(connection);
     }
 
     private boolean validatePassword(String password) {
